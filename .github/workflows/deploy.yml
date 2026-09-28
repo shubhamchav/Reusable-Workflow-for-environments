@@ -8,16 +8,8 @@ on:
         required: true
         type: string
 
-      environment-url:
-        description: "Environment URL"
-        required: true
-        type: string
-
 jobs:
 
-  # --------------------
-  # Build Job
-  # --------------------
   build:
     name: Build Application
     runs-on: ubuntu-latest
@@ -32,22 +24,27 @@ jobs:
           echo "Build completed successfully"
 
 
-  # --------------------
-  # Deploy Job
-  # --------------------
   deploy:
     name: Deploy to ${{ inputs.environment }}
     needs: build
     runs-on: ubuntu-latest
 
+    environment:
+      name: ${{ inputs.environment }}
+      url: ${{ vars.APP_URL }}
+
     steps:
+      - name: Show environment variables
+        run: |
+          echo "Environment: ${{ inputs.environment }}"
+          echo "Application URL: ${{ vars.APP_URL }}"
+
       - name: Deploy application
         run: |
           echo "Deploying application..."
-          echo "Environment: ${{ inputs.environment }}"
-          echo "Environment URL: ${{ inputs.environment-url }}"
+          echo "Deploying to: ${{ vars.APP_URL }}"
 
       - name: Deployment completed
         run: |
           echo "Application deployed successfully!"
-          echo "URL: ${{ inputs.environment-url }}"
+          echo "URL: ${{ vars.APP_URL }}"
