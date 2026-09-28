@@ -9,4 +9,3 @@ jobs:
 
     with:
       environment: staging
-      environment-url: https://staging.example.com
